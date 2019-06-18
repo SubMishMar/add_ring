@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+    <param name ="/use_sim_time" value="true"/>
+    <node  pkg="add_ring"
+           name="add_ring_node"
+           type="add_ring_node"
+           output="screen">
+    </node>
+</launch>
