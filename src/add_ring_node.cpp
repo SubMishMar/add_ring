@@ -25,9 +25,8 @@ POINT_CLOUD_REGISTER_POINT_STRUCT (Pointxyzi, // here we assume a XYZ + "i" (as 
 struct PointXYZIRR
 {
     PCL_ADD_POINT4D;                  // preferred way of adding a XYZ+padding
-    float Intensity;
-    int Ring;
-    float Range;
+    float intensity;
+    uint16_t ring;
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW   // make sure our new allocators are aligned
 } EIGEN_ALIGN16;                    // enforce SSE padding for correct memory alignment
 
@@ -35,9 +34,8 @@ POINT_CLOUD_REGISTER_POINT_STRUCT (PointXYZIRR, // here we assume a XYZ + "i" (a
                                    (float, x, x)
                                    (float, y, y)
                                    (float, z, z)
-                                   (float, Intensity, Intensity)
-                                   (int, Ring, Ring)
-                                   (float, Range, Range)
+                                   (float, intensity, intensity)
+                                   (uint16_t, ring, ring)
 )
 class AddRing {
 private:
@@ -81,13 +79,12 @@ public:
             x = pt.x = cloud_out->points[i].x = it->x;
             y = pt.y = cloud_out->points[i].y = it->y;
             z = pt.z = cloud_out->points[i].z = it->z;
-            cloud_out->points[i].Intensity = it->i;
-            cloud_out->points[i].Range = sqrt(x*x + y*y + z*z);
+            cloud_out->points[i].intensity = it->i;
             int quadrant = get_quadrant(pt);
             if((quadrant == 1) && (prev_quadrant == 4) && (ring < num_of_rings -1)) {
                 ring ++;
             }
-            cloud_out->points[i].Ring = ring;
+            cloud_out->points[i].ring = ring;
             prev_quadrant = quadrant;
         }
 
