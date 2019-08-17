@@ -92,6 +92,7 @@ public:
     }
 
     void callback(const sensor_msgs::PointCloud2::ConstPtr& cloud_msg) {
+        ros::Time begin = ros::Time::now();
         pcl::PointCloud<Pointxyzi>::Ptr cloud (new pcl::PointCloud<Pointxyzi>);
         pcl::PointCloud<PointXYZIRR>::Ptr cloud_out(new pcl::PointCloud<PointXYZIRR>);
         pcl::fromROSMsg(*cloud_msg, *cloud);
@@ -101,6 +102,9 @@ public:
         cloud_out_ros.header.stamp = cloud_msg->header.stamp;
         cloud_out_ros.header.frame_id = cloud_msg->header.frame_id;
         cloud_pub.publish(cloud_out_ros);
+        ros::Time end = ros::Time::now();
+        double time_elapsed = end.toSec() - begin.toSec();
+        ROS_WARN_STREAM("Adding Rings Took: " << time_elapsed << " [s]");
     }
 };
 
